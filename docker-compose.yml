@@ -1,0 +1,39 @@
+services:
+  frontend:
+    build: ./CourseFrontend/frontend
+    ports:
+      - "3000:3000"
+  
+    networks:
+      - my_network
+
+  backend:
+    build: ./CourseApplication
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/coursemanage
+      SPRING_DATASOURCE_USERNAME: root
+      PRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - my_network
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: coursemanage
+      MYSQL_PASSWORD: root
+    volumes:
+      - mysql-db:/var/lib/mysql
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  mysql-db: {}
